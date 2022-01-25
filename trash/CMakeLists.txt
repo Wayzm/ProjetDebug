@@ -1,4 +1,17 @@
-cmake_minimum_required(VERSION 3.10)
+
+
+
+
+
+
+
+Makefile better for this kind of project
+
+
+
+
+
+###cmake_minimum_required(VERSION 3.10)
 
 project("Debug")
 
