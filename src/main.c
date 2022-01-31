@@ -4,10 +4,16 @@
 
 
 #include "tools.h"
+#include "sfm.h"
+
+int* vector;
 
 
 int main (int argv, char ** argc)
 {
-  printf("Test. \n");
+  if(argc[1]=="sf")
+  {
+    // Catch a segfault
+  }
   return 0;
 }

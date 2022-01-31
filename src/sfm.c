@@ -1,18 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int *Segfaultmachine;
+#include "sfm.h"
 
-int main (int argv, char **argc)
+
+void segfault(int* vector)
 {
-  // We dont malloc in order to induce a segfault 
+  // We dont malloc in order to induce a segfault
 
   for (int i=0; i<25;i++)
   {
-    Segfaultmachine[i]=rand();
-    printf("%d \n",Segfaultmachine[i]);
+    vector[i]=rand();
+    printf("%d \n",vector[i]);
   }
 
-  return 0;
-  free(Segfaultmachine);
 }
