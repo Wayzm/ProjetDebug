@@ -8,7 +8,7 @@ INT= icc
 OPTC=-Ofast -fopenmp  -mavx2
 
 # Directories
-INCH= ./include
+INCH= -I ./include
 INCS= ./src
 INCB= ./bin
 
@@ -17,8 +17,8 @@ INCB= ./bin
 ###
 ###
 
-DEBUG= main.o
-
+DEBUG = main.o
+SEGF = sfm.o
 ###
 ###
 ###
@@ -27,7 +27,11 @@ all: bin/main
 
 
 main.o: $(INCS)/main.c
-	$(CC) $(OPTC) -c $(INCS)/main.c
+	$(CC) $(OPTC) -c $(INCH) $(INCS)/main.c
+
+sfm.o: $(INCS)/sfm.c
+	$(CC) $(OPTC) -c $(INCH) $(INCS)/sfm.c
+
 
 
 bin/main: $(DEBUG)

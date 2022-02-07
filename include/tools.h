@@ -1,29 +1,6 @@
 // .h
-#ifndef tools.h
-#define tools.h
+
 
 #include <stdio.h>
-#include <stdlid.h>
+#include <stdlib.h>
 #include <sys/wait.h>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#endif
