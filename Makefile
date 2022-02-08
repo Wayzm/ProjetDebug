@@ -48,5 +48,11 @@ bin/main: $(DEBUG)
 debg:
 	bin/main
 
+test_sfm:
+	bin/sfm
+
+test_fpe:
+	bin/fpe
+
 clean:
 	rm *.o bin/*
