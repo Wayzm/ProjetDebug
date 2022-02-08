@@ -13,18 +13,17 @@ INCS= ./src
 INCB= ./bin
 
 ###
-###
-###
-###
 
 DEBUG = main.o
-SEGF = sfm.o
-###
-###
+SFM = sfm.o
+FPE = fpe.o
+
 ###
 
-all: bin/main
 
+all: bin/main bin/sfm bin/fpe
+
+debg: bin/main
 
 main.o: $(INCS)/main.c
 	$(CC) $(OPTC) -c $(INCH) $(INCS)/main.c
@@ -32,13 +31,21 @@ main.o: $(INCS)/main.c
 sfm.o: $(INCS)/sfm.c
 	$(CC) $(OPTC) -c $(INCH) $(INCS)/sfm.c
 
+fpe.o: $(INCS)/fpe.c
+	$(CC) $(OPTC) -c $(INCH) $(INCS)/fpe.c
 
+### On veut le binaire des programmes ci dessous
+bin/sfm: $(SFM)
+	$(CC) -o $(INCB)/sfm $(OPTC) $(SFM)
+
+bin/fpe: $(FPE)
+	$(CC) -o $(INCB)/fpe $(OPTC) $(FPE)
+###
 
 bin/main: $(DEBUG)
 	$(CC) -o $(INCB)/main $(OPTC) $(DEBUG)
 
-
-gcc:
+debg:
 	bin/main
 
 clean:

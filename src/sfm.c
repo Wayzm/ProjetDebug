@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "sfm.h"
+#include "Errors.h"
 
+int *axis;
 
 void segfault(int* vector)
 {
@@ -14,4 +15,10 @@ void segfault(int* vector)
     printf("%d \n",vector[i]);
   }
 
+}
+
+int main (int arg, char **argc)
+{
+  segfault(axis);
+  return 1;
 }

@@ -5,19 +5,18 @@
 #include <termios.h>
 
 #include "tools.h"
-#include "sfm.h"
 
 int* vector;
 
 char key;
 
-void choice (int nbr)
+void choice (int nbr, char **argc)
 {
     key = 0;
 
     switch(key){
       case 's':
-        // Segfault
+        // Segfaul
         break;
       case 'c':
         // catch SIGINT
@@ -34,5 +33,6 @@ void choice (int nbr)
 int main (int argv, char ** argc)
 {
   char key;
+  printf("LOL\n");
   return 0;
 }
