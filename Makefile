@@ -17,6 +17,7 @@ INCB= ./bin
 DEBUG = main.o
 SFM = sfm.o
 FPE = fpe.o
+TLS = tools.o
 
 ###
 
@@ -34,6 +35,9 @@ sfm.o: $(INCS)/sfm.c
 fpe.o: $(INCS)/fpe.c
 	$(CC) $(OPTC) -c $(INCH) $(INCS)/fpe.c
 
+tools.o: $(INCS)/tools.c
+	$(CC) $(OPTC) -c $(INCH) $(INCS)/tools.c
+
 ### On veut le binaire des programmes ci dessous
 bin/sfm: $(SFM)
 	$(CC) -o $(INCB)/sfm $(OPTC) $(SFM)
@@ -42,8 +46,8 @@ bin/fpe: $(FPE)
 	$(CC) -o $(INCB)/fpe $(OPTC) $(FPE)
 ###
 
-bin/main: $(DEBUG)
-	$(CC) -o $(INCB)/main $(OPTC) $(DEBUG)
+bin/main: $(DEBUG) $(TLS)
+	$(CC) -o $(INCB)/main $(OPTC) $(DEBUG) $(TLS)
 
 debg:
 	bin/main
