@@ -1,2 +1,8 @@
-This is the Debug Project 
+This is the Debug Project
 Contributor : Chutzpa William YEUMO BARKWENDE
+
+How to use :
+-Make sure that your CWD is */ProjetPOSIX
+-Use : make
+-use : make debg
+-Have fun catching different types of error signals and see where they come from
