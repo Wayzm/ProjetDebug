@@ -7,15 +7,28 @@
 #include <stdlib.h>
 #include <sys/ptrace.h>
 #include <string.h>
+#include <fcntl.h>
 
+
+void segferror (int sig, siginfo_t *info, void *ctx)
+{
+  printf("Unlucky le segfault owo ");
+}
+
+void fperror (int sig, siginfo_t *info, void *ctx)
+{
+  printf("Les cours de maths alors? uwu ");
+}
 
 
 
 
 void choice ()
 {
-    char key_press = 0;
-    read(STDIN_FILENO, &key_press, sizeof(char));
+    int flags = fcntl(STDIN_FILENO, F_GETFL);
+    fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK | O_NOCTTY ); // read non bloquant
+    char key_press;
+    size_t pread = read(STDIN_FILENO, &key_press, sizeof(char));
     struct sigaction pdt;
     switch(key_press)
     {
@@ -68,15 +81,4 @@ void choice ()
         printf("How to use : \n \n Press 1 to catch a SIGSEGV. \n Press 2 to catch SIGFPE. \n Press q to exit.");
       break;
   }
-}
-
-
-void segferror (int sig, siginfo_t *info, void *ctx)
-{
-  printf("Unlucky le segfault owo ");
-}
-
-void fperror (int sig, siginfo_t *info, void *ctx)
-{
-  printf("Les cours de maths alors? uwu ");
 }
