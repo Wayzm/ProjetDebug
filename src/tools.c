@@ -20,7 +20,7 @@ void fperror (int sig, siginfo_t *info, void *ctx)
   printf("Les cours de maths alors? uwu ");
 }
 
-
+// Test commit with new OS and VSCode
 
 
 void choice ()
