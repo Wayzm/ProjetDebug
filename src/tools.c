@@ -9,10 +9,43 @@
 #include <string.h>
 #include <fcntl.h>
 
+// PTRACE_GETSIGINFO
+// sigaction
+// PTRACE_SETOPTIONS
+
+int cnt_int = 0;
+int cnt_segv = 0;
+int cnt_fpe = 0;
+int cnt_ill = 0;
+
+struct sigaction sgt;
+
+void sig_int ()
+{
+  
+}
+
+void c_c()
+{
+  int sig;
+	switch(sig)
+	{
+		case SIGINT:
+			printf("sigint found %d\n", sig);
+			cnt_int++;
+			break;
+		case SIGSEGV:
+			printf("sigsegv found %d\n", sig);
+			cnt_segv++;
+			break;
+		default:
+			printf("No errors ?\n");
+	}
+}
 
 void segferror (int sig, siginfo_t *info, void *ctx)
 {
-  printf("Unlucky le segfault owo ");
+  printf("Error found ! ");
 }
 
 void fperror (int sig, siginfo_t *info, void *ctx)
@@ -25,17 +58,14 @@ void fperror (int sig, siginfo_t *info, void *ctx)
 
 void choice ()
 {
-    int flags = fcntl(STDIN_FILENO, F_GETFL);
-    fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK | O_NOCTTY ); // read non bloquant
     char key_press;
     size_t pread = read(STDIN_FILENO, &key_press, sizeof(char));
-    struct sigaction pdt;
     switch(key_press)
     {
       case 1:
-        // Segfaul
-        pdt.sa_sigaction = segferror;
-        pdt.sa_flags = SA_SIGINFO;
+        // Segfault
+        sgt.sa_sigaction = segferror;
+        sgt.sa_flags = SA_SIGINFO;
 
         char *tb[] = {"sfm", NULL};
         char *env[] = {"bin", NULL};
@@ -49,18 +79,18 @@ void choice ()
 
           // In the manual, execve is the "usual" function used alongside PTRACE
           if (execve(tb[0], tb, env) == -1)
-            perror("Exec of segfault programme failed");
+            perror("Exec failed");
 
-          if (sigaction(SIGSEGV, &pdt, NULL))
+          if (sigaction(SIGSEGV, &sgt, NULL))
           		perror("sigaction child");
         }
         else
         {
           ptrace(PTRACE_SEIZE, child, 0, PTRACE_O_TRACESYSGOOD); //
 
-          memset(&pdt, 0, sizeof(struct sigaction));
+          memset(&sgt, 0, sizeof(struct sigaction));
 
-          if(sigaction(SIGSEGV, &pdt, NULL) )
+          if(sigaction(SIGSEGV, &sgt, NULL) )
           {
             perror("sigaction parent");
           }
@@ -70,8 +100,8 @@ void choice ()
         break;
       case 2:
         // catch SIGFPE
-        pdt.sa_sigaction = fperror;
-        pdt.sa_flags = SA_SIGINFO;
+        sgt.sa_sigaction = fperror;
+        sgt.sa_flags = SA_SIGINFO;
         break;
       case 3:
         break;
@@ -80,5 +110,5 @@ void choice ()
       default:
         printf("How to use : \n \n Press 1 to catch a SIGSEGV. \n Press 2 to catch SIGFPE. \n Press q to exit.");
       break;
-  }
+    }
 }

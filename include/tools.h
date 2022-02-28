@@ -4,6 +4,10 @@
 
 void choice ();
 
+
+//Catch and count signals
+void c_c ();
+
 void tracer(pid_t Child);
 
 void code (char **argc);
