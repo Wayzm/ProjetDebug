@@ -40,23 +40,23 @@ tools.o: $(INCS)/tools.c
 
 ### On veut le binaire des programmes ci dessous
 bin/sfm: $(SFM)
-	$(CC) -o $(INCB)/sfm $(OPTC) $(SFM)
+	$(CC) -o sfm $(OPTC) $(SFM)
 
 bin/fpe: $(FPE)
-	$(CC) -o $(INCB)/fpe $(OPTC) $(FPE)
+	$(CC) -o fpe $(OPTC) $(FPE)
 ###
 
 bin/main: $(DEBUG) $(TLS)
 	$(CC) -o $(INCB)/main $(OPTC) $(DEBUG) $(TLS)
 
-debg:
+debug:
 	bin/main
 
 test_sfm:
-	bin/sfm
+	sfm
 
 test_fpe:
-	bin/fpe
+	fpe
 
 clean:
 	rm *.o bin/*

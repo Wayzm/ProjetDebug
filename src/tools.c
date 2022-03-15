@@ -13,76 +13,97 @@
 // sigaction
 // PTRACE_SETOPTIONS
 
-int cnt_int = 0;
-int cnt_segv = 0;
-int cnt_fpe = 0;
-int cnt_ill = 0;
+char *buff[]; // buffer for the backtrace to get the function name 
 
 struct sigaction sgt;
 
-void sig_int ()
+// This functions will get the executable file name for the debugger
+void prog_name(char* binairename, char* cwd)
 {
-  
+  if(getcwd(cwd,sizeof(cwd)) != NULL)
+  {
+    printf("Double check that your file is in the right directory, which is where the makefile is. \n");
+
+    if(read(0, binairename, 128) < 0)
+    {
+      printf("An error occurred in the read.\n");
+    }
+
+    else // Now we check if the fileis is in the cwd
+      {
+        if(access( strcat(cwd,binairename), X_OK ) == 0 ) 
+        {
+          //file is here
+          printf("File name is good and file was found and can be executed ! \n");
+        } 
+        
+      else 
+        {
+          // file doesn't exist
+          printf("File name is good but file was not found or does not have executable permission! \n");
+        }
+      }
+  }
 }
 
-void c_c()
+
+// Sighandler that will find the errors, will stop at the first error found.
+void c_c(int sig)
 {
-  int sig;
 	switch(sig)
 	{
-		case SIGINT:
-			printf("sigint found %d\n", sig);
-			cnt_int++;
+		case SIGILL:
+			printf("sigill found %d\n", sig);
 			break;
 		case SIGSEGV:
 			printf("sigsegv found %d\n", sig);
-			cnt_segv++;
+			break;
+    case SIGFPE:
+			printf("sigfpe found %d\n", sig);
 			break;
 		default:
 			printf("No errors ?\n");
 	}
 }
 
-void segferror (int sig, siginfo_t *info, void *ctx)
+void sigerror (int sig, siginfo_t *info, void *ctx)
 {
   printf("Error found ! ");
-}
-
-void fperror (int sig, siginfo_t *info, void *ctx)
-{
-  printf("Les cours de maths alors? uwu ");
 }
 
 // Test commit with new OS and VSCode
 
 
-void choice ()
+void choice (char* binairename)
 {
     char key_press;
     size_t pread = read(STDIN_FILENO, &key_press, sizeof(char));
+    char *tb[] = {"sfm fpe", NULL};
+    char *env[] = {"bin", NULL};
+    sgt.sa_sigaction = sigerror;
+    sgt.sa_flags = SA_SIGINFO;
+
     switch(key_press)
     {
       case 1:
-        // Segfault
-        sgt.sa_sigaction = segferror;
-        sgt.sa_flags = SA_SIGINFO;
+        pid_t child = fork();
 
-        char *tb[] = {"sfm", NULL};
-        char *env[] = {"bin", NULL};
-
-        pid_t child = 1;
-        child = fork();
-
-        if(child == 1)
+        if(child == 0)
         {
-          ptrace(PTRACE_TRACEME); // The tracee is expected to be traced by its parent
+          ptrace(PTRACE_TRACEME,child, NULL, NULL); // The tracee is expected to be traced by its parent
 
           // In the manual, execve is the "usual" function used alongside PTRACE
-          if (execve(tb[0], tb, env) == -1)
+          if (execvp(tb[0], tb) == -1)
             perror("Exec failed");
 
           if (sigaction(SIGSEGV, &sgt, NULL))
-          		perror("sigaction child");
+          		perror("Wrong use of memory! \n");
+          
+          if (sigaction(SIGFPE, &sgt, NULL))
+          		perror("Math error found! \n");
+                    
+          if (sigaction(SIGILL, &sgt, NULL))
+          		perror("Illegal instruction found! \n");
         }
         else
         {
@@ -90,20 +111,16 @@ void choice ()
 
           memset(&sgt, 0, sizeof(struct sigaction));
 
-          if(sigaction(SIGSEGV, &sgt, NULL) )
-          {
-            perror("sigaction parent");
-          }
+          c_c(SIGCHLD); // SIGCHLD allows us to know when the child ends
 
         }
 
         break;
       case 2:
-        // catch SIGFPE
-        sgt.sa_sigaction = fperror;
-        sgt.sa_flags = SA_SIGINFO;
+
         break;
-      case 3:
+      case 'r':
+        
         break;
       case 'q':
         break;

@@ -8,8 +8,13 @@
 #include "tools.h"
 
 
-int main (int argv, char ** argc)
+int main ()
 {
+  char cwd[257];
+  char* name;
+  name = (char*)malloc((128)*sizeof(char));
+  prog_name(name,cwd);
+
   //Change how the tty works 
   struct termios old_term, new_term;
   int flags = fcntl(STDIN_FILENO, F_GETFL);
@@ -20,14 +25,14 @@ int main (int argv, char ** argc)
   tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
 
   choice();
-  printf("LOL\n");
-  return 0;
+  printf("LOL! \n");
 
   //Everything back to starting point
   tcflush(STDIN_FILENO, TCIFLUSH); 
   tcsetattr(STDIN_FILENO, TCSANOW, &old_term);
   fcntl(STDIN_FILENO, F_SETFL, flags);
 
-
+  free(name);
+  return 0;
 
 }
