@@ -11,8 +11,9 @@ void fpe ()
   double ans = n/d;
 }
 
-int main (int argv, char **argc)
+int main (int argc, char **argv)
 {
+  printf(" Argument : %s", argv[1]);
   fpe();
   return 2;
 }

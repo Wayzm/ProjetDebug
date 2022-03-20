@@ -1,1 +1,3 @@
 Compiler dynamiquement une librairie, c'est mieux
+backtrace
+présentation un peu plus jolie car c'est archi moche lol mdr lol 

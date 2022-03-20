@@ -5,7 +5,7 @@ CC=gcc
 INT= icc
 
 ### Compiler options
-OPTC=-Ofast -fopenmp  -mavx2
+OPTC= -g -mavx2 -rdynamic
 
 # Directories
 INCH= -I ./include
@@ -47,16 +47,18 @@ bin/fpe: $(FPE)
 ###
 
 bin/main: $(DEBUG) $(TLS)
-	$(CC) -o $(INCB)/main $(OPTC) $(DEBUG) $(TLS)
+	$(CC) -o debug $(OPTC) $(DEBUG) $(TLS)
 
 debug:
-	bin/main
+	debug
 
 test_sfm:
-	sfm
+	bin/sfm
 
 test_fpe:
-	fpe
+	bin/fpe
 
 clean:
-	rm *.o bin/*
+	rm *.o  fpe sfm debug
+
+

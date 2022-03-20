@@ -1,20 +1,35 @@
 // .h
 #ifndef TOOLS_H
 #define TOOLS_H
+#include <stdio.h>
+#include <sys/ioctl.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <stdlib.h>
+#include <sys/ptrace.h>
+#include <string.h>
+#include <fcntl.h>
+#include <elf.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <execinfo.h>
+#include <errno.h>
 
-void choice ();
+// Main function where we fork the child and have him run the executable 
+void choice (char **argv);
 
+// This function will give us the elf map of the executable ran by the child
+void elf_mapping(char **argv);
 
-//Catch signals
+//Tells us what signal it is
 void c_c(int sig);
 
-void tracer(pid_t Child);
-
-void code (char **argc);
-
+// This is to be used with sigaction, mainly to stop people users from using ctrl c
 void segferror (int sig, siginfo_t *info, void *ctx);
 
-void fperror (int sig, siginfo_t *info, void *ctx);
+// To verify that the set up is correct
+void  prog_name(char **argv);
 
-void  prog_name(char* binairename,char* cwd);
 #endif
