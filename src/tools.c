@@ -189,13 +189,13 @@ void choice (char  **argv)
       {
         printf("Child killed by signal %d\n", WTERMSIG(status));
 
-        c_c(WTERMSIG(status)); // SIGCHLD allows us to know when the child ends
+        c_c(WTERMSIG(status));
       }
 
       else if (WIFSTOPPED(status)) 
       {
         printf("Child stopped by signal %d\n", WSTOPSIG(status));
-        c_c(WSTOPSIG(status)); // SIGCHLD allows us to know when the child ends
+        c_c(WSTOPSIG(status)); 
       }
       else if (WIFCONTINUED(status)) 
       {
