@@ -1,0 +1,8 @@
+Afin de faire se projet ma démarche a été la suivante :
+
+-Premièrement, créer le processus fils et arriver à lui faire executer un code qui marche. Un binaire qui print un hello world suffisait.
+-A partir de la j'ai ensuite fait des recherches sur ptrace car c'était l'élément que nous avions le moin traité en cours.
+-Le man ptrace étant très complet, il m'a permis de trouver les flags nécessaires afin de pouvoir récupérer les signaux du child lui envoyé de SIGSTOP ou recevoir des SIGTRAPS
+-Ensuite, j'ai implémenté un sighandler pour analyser les signaux attrapés par waitpid.
+-Puis j'ai implémenté un catcher de SIGINT pour empêcher les ctrl c mais c'était d'abord dans le but d'empêcher le processus fils d'envoyer certains signaux mais cela aurait pu être dangeureux
+-Enfin pour terminer j'ai implémenté une fonction elf pour lire le binaire de l'executable donné au fils
