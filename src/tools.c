@@ -159,7 +159,8 @@ void choice (char  **argv)
   if(child == 0)
   {
     ptrace(PTRACE_TRACEME,child, NULL, NULL); // The tracee is expected to be traced by its parent
-    printf("Child PID is %d\n", (int) getpid());
+    int pid_child = getpid();
+    printf("Child PID is %d\n", pid_child);
 
     // In the manual, execve is the "usual" function used alongside PTRACE
     if (execve(filename[0], filename, NULL) == -1)
@@ -209,9 +210,25 @@ void choice (char  **argv)
       
     }
   elf_mapping(argv);
-  if (sigaction(SIGINT, &sgt, NULL))
-    perror("Cant catch those sigints :'( \n");
-  
-  while(1);
 
+  kill(child,9);
+  
+  char key_press;
+  while(1)
+  {
+    if (sigaction(SIGINT, &sgt, NULL))
+      perror("Cant catch those sigints :'( \n");
+    
+    printf("Press q to quit ! \n");
+    read(STDIN_FILENO,&key_press,sizeof(char));
+    
+    if(key_press == 'q')
+    {
+      exit(0);
+    }
+    else 
+    {
+      printf("Press q please :'(");
+    }
+  }
 }

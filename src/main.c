@@ -10,7 +10,7 @@
 
 int main (int argc, char **argv)
 {
-
+  int h = 0;
   prog_name(argv);
 
   choice(argv);
